@@ -1,0 +1,58 @@
+{
+  "datasets": [
+    {
+      "name": "chronic_wounds",
+      "source_folder": "C:/path/to/chronic/wounds",
+      "wound_type": "chronic",
+      "healing_category": "slow_healing",
+      "default_days_to_cure": 60,
+      "description": "Chronic non-healing wounds"
+    },
+    {
+      "name": "surgical_wounds",
+      "source_folder": "C:/path/to/surgical/wounds",
+      "wound_type": "surgical",
+      "healing_category": "fast_healing",
+      "default_days_to_cure": 7,
+      "description": "Post-surgical incisions"
+    },
+    {
+      "name": "burn_wounds",
+      "source_folder": "C:/path/to/burn/wounds",
+      "wound_type": "burn",
+      "healing_category": "moderate_healing",
+      "default_days_to_cure": 21,
+      "description": "Thermal burn injuries"
+    },
+    {
+      "name": "diabetic_wounds",
+      "source_folder": "C:/path/to/diabetic/wounds",
+      "wound_type": "diabetic",
+      "healing_category": "chronic_non_healing",
+      "default_days_to_cure": 90,
+      "description": "Diabetic foot ulcers"
+    },
+    {
+      "name": "pressure_ulcers",
+      "source_folder": "C:/path/to/pressure/wounds",
+      "wound_type": "pressure_ulcer",
+      "healing_category": "slow_healing",
+      "default_days_to_cure": 45,
+      "description": "Pressure sores/bedsores"
+    },
+    {
+      "name": "trauma_wounds",
+      "source_folder": "C:/path/to/trauma/wounds",
+      "wound_type": "trauma",
+      "healing_category": "moderate_healing",
+      "default_days_to_cure": 14,
+      "description": "Accidental trauma wounds"
+    }
+  ],
+  "settings": {
+    "create_combined_dataset": true,
+    "combined_dataset_name": "mixed_wounds",
+    "validation_split": 0.2,
+    "augment_data": true
+  }
+}

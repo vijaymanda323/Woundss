@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Wound Healing Workflow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+        
+        .workflow-step {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .step-description {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .step-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+        }
+        
+        .test-results {
+            background: #e3f2fd;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-results h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+        
+        .test-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #bbdefb;
+        }
+        
+        .test-item:last-child {
+            border-bottom: none;
+        }
+        
+        .test-label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .test-value {
+            color: #7f8c8d;
+            margin-left: 10px;
+        }
+        
+        .error-message {
+            background: #ffebee;
+            border: 1px solid #f44336;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #c62828;
+        }
+        
+        .success-message {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Workflow Test</h1>
+            <p>Testing the complete wound healing workflow</p>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-title">1. React Native App Status</div>
+            <div class="step-description">Check if the React Native app is running and accessible</div>
+            <span class="step-status status-pending" id="appStatus">Checking...</span>
+            <div style="margin-top: 15px;">
+                <a href="http://localhost:8081" class="btn" target="_blank" id="appLink">Open React Native App</a>
+                <a href="http://localhost:3000" class="btn btn-secondary" target="_blank">Alternative Port</a>
+            </div>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-title">2. Enhanced UI Server</div>
+            <div class="step-description">Check if the enhanced UI server is running</div>
+            <span class="step-status status-pending" id="uiStatus">Checking...</span>
+            <div style="margin-top: 15px;">
+                <a href="http://localhost:5001" class="btn btn-success" target="_blank" id="uiLink">Open Enhanced UI</a>
+            </div>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-title">3. Data Storage Test</div>
+            <div class="step-description">Test patient data storage and retrieval</div>
+            <span class="step-status status-pending" id="dataStatus">Testing...</span>
+            <div style="margin-top: 15px;">
+                <button class="btn" onclick="testDataStorage()">Test Data Storage</button>
+                <button class="btn btn-secondary" onclick="clearTestData()">Clear Test Data</button>
+            </div>
+        </div>
+
+        <div class="workflow-step">
+            <div class="step-title">4. Workflow Demo</div>
+            <div class="step-description">Try the complete workflow with sample data</div>
+            <span class="step-status status-pending" id="workflowStatus">Ready</span>
+            <div style="margin-top: 15px;">
+                <button class="btn" onclick="simulateWorkflow()">Simulate Complete Workflow</button>
+                <button class="btn btn-secondary" onclick="showWorkflowSteps()">Show Workflow Steps</button>
+            </div>
+        </div>
+
+        <div id="testResults" style="display: none;">
+            <div class="test-results">
+                <h3>📊 Test Results</h3>
+                <div id="testContent"></div>
+            </div>
+        </div>
+
+        <div id="errorMessage" style="display: none;" class="error-message">
+            <strong>❌ Error:</strong> <span id="errorText"></span>
+        </div>
+
+        <div id="successMessage" style="display: none;" class="success-message">
+            <strong>✅ Success:</strong> <span id="successText"></span>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <h3>🚀 Quick Access</h3>
+            <div style="margin: 20px 0;">
+                <a href="complete_workflow_demo.html" class="btn">Complete Workflow Demo</a>
+                <a href="photo_upload_demo.html" class="btn btn-secondary">Photo Upload Demo</a>
+                <a href="simple_react_web.html" class="btn btn-success">Simple Analysis Demo</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test data storage functionality
+        function testDataStorage() {
+            try {
+                // Test patient ID generation
+                const patientId = generatePatientId();
+                
+                // Test data storage
+                const testPatient = {
+                    id: patientId,
+                    name: 'Test Patient',
+                    dateOfBirth: '1990-01-01',
+                    gender: 'Male',
+                    contact: 'test@example.com',
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Store test data
+                localStorage.setItem('testPatient', JSON.stringify(testPatient));
+                
+                // Retrieve test data
+                const retrievedData = JSON.parse(localStorage.getItem('testPatient'));
+                
+                if (retrievedData && retrievedData.id === patientId) {
+                    showSuccess('Data storage test passed! Patient ID: ' + patientId);
+                    document.getElementById('dataStatus').textContent = 'Success';
+                    document.getElementById('dataStatus').className = 'step-status status-success';
+                    
+                    showTestResults({
+                        'Patient ID Generated': patientId,
+                        'Data Stored': 'Success',
+                        'Data Retrieved': 'Success',
+                        'Data Integrity': 'Passed'
+                    });
+                } else {
+                    throw new Error('Data integrity check failed');
+                }
+            } catch (error) {
+                showError('Data storage test failed: ' + error.message);
+                document.getElementById('dataStatus').textContent = 'Failed';
+                document.getElementById('dataStatus').className = 'step-status status-error';
+            }
+        }
+
+        function clearTestData() {
+            try {
+                localStorage.removeItem('testPatient');
+                localStorage.removeItem('woundPatients');
+                showSuccess('Test data cleared successfully');
+            } catch (error) {
+                showError('Failed to clear test data: ' + error.message);
+            }
+        }
+
+        function simulateWorkflow() {
+            try {
+                // Simulate the complete workflow
+                const workflowSteps = [
+                    'Photo Upload',
+                    'AI Analysis',
+                    'Patient ID Generation',
+                    'Treatment Plan Generation',
+                    'Report Generation',
+                    'PDF Download'
+                ];
+                
+                let currentStep = 0;
+                const interval = setInterval(() => {
+                    if (currentStep < workflowSteps.length) {
+                        console.log(`Step ${currentStep + 1}: ${workflowSteps[currentStep]}`);
+                        currentStep++;
+                    } else {
+                        clearInterval(interval);
+                        showSuccess('Complete workflow simulation finished successfully!');
+                        document.getElementById('workflowStatus').textContent = 'Completed';
+                        document.getElementById('workflowStatus').className = 'step-status status-success';
+                    }
+                }, 1000);
+                
+                showTestResults({
+                    'Workflow Steps': workflowSteps.length,
+                    'Current Status': 'Running',
+                    'Expected Duration': '6 seconds',
+                    'Simulation': 'Active'
+                });
+                
+            } catch (error) {
+                showError('Workflow simulation failed: ' + error.message);
+            }
+        }
+
+        function showWorkflowSteps() {
+            const steps = [
+                '1. Upload wound photo (camera/gallery/drag & drop)',
+                '2. AI analyzes wound and generates patient ID',
+                '3. View analysis results with wound classification',
+                '4. Generate personalized treatment plan',
+                '5. Fill patient information forms',
+                '6. Generate and download PDF reports'
+            ];
+            
+            showTestResults({
+                'Complete Workflow': steps.join(' | '),
+                'Total Steps': steps.length,
+                'Platform Support': 'Web, Android, iOS',
+                'Report Types': 'Patient & Clinician'
+            });
+        }
+
+        function generatePatientId() {
+            const timestamp = Date.now().toString(36);
+            const randomStr = Math.random().toString(36).substring(2, 8);
+            return `P${timestamp}${randomStr}`.toUpperCase();
+        }
+
+        function showTestResults(results) {
+            const testResults = document.getElementById('testResults');
+            const testContent = document.getElementById('testContent');
+            
+            testContent.innerHTML = '';
+            for (const [key, value] of Object.entries(results)) {
+                const testItem = document.createElement('div');
+                testItem.className = 'test-item';
+                testItem.innerHTML = `
+                    <span class="test-label">${key}:</span>
+                    <span class="test-value">${value}</span>
+                `;
+                testContent.appendChild(testItem);
+            }
+            
+            testResults.style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            document.getElementById('successText').textContent = message;
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Check app status on load
+        window.addEventListener('load', function() {
+            // Check React Native app
+            fetch('http://localhost:8081')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('appStatus').textContent = 'Running';
+                        document.getElementById('appStatus').className = 'step-status status-success';
+                    } else {
+                        throw new Error('App not responding');
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('appStatus').textContent = 'Not Running';
+                    document.getElementById('appStatus').className = 'step-status status-error';
+                });
+
+            // Check Enhanced UI
+            fetch('http://localhost:5001')
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('uiStatus').textContent = 'Running';
+                        document.getElementById('uiStatus').className = 'step-status status-success';
+                    } else {
+                        throw new Error('UI not responding');
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('uiStatus').textContent = 'Not Running';
+                    document.getElementById('uiStatus').className = 'step-status status-error';
+                });
+        });
+
+        console.log('Workflow Test Page loaded successfully!');
+    </script>
+</body>
+</html>
+
+
+
+

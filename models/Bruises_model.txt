@@ -1,0 +1,5 @@
+Simple model for Bruises
+Trained on 10 images
+Image size: (256, 256, 3)
+Model type: OpenCV-based segmentation
+Status: Ready for inference

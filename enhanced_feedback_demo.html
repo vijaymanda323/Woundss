@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Feedback System Demo - Wound Healing App</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin: 10px 0 0 0;
+        }
+        .demo-section {
+            margin: 30px 0;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+        .demo-section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .workflow-step {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .workflow-step h3 {
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .workflow-step p {
+            color: #7f8c8d;
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        .ui-mockup {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .button-demo {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .button-demo.right {
+            background: #27ae60;
+        }
+        .button-demo.wrong {
+            background: #e74c3c;
+        }
+        .button-demo.type {
+            background: #3498db;
+        }
+        .button-demo.submit {
+            background: #667eea;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        .icon {
+            font-size: 1.2em;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Enhanced Feedback System</h1>
+            <p>Real-time model learning from user corrections</p>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎯 How It Works</h2>
+            
+            <div class="workflow-step">
+                <h3>1️⃣ User Uploads Image</h3>
+                <p>User uploads a wound image and gets an AI prediction</p>
+                <div class="ui-mockup">
+📸 Image Uploaded
+🤖 AI Prediction: "burn"
+📊 Confidence: 95%
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <h3>2️⃣ User Reviews Prediction</h3>
+                <p>User sees the prediction and decides if it's correct</p>
+                <div class="ui-mockup">
+Predicted: BURN
+Is this correct?
+
+<div class="button-demo right">✅ Correct</div>
+<div class="button-demo wrong">❌ Incorrect</div>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <h3>3️⃣ If Incorrect - Type Selector Appears</h3>
+                <p>When user clicks "Incorrect", a wound type selector appears</p>
+                <div class="ui-mockup">
+🤔 What is the correct wound type?
+Predicted: burn
+
+<div class="button-demo type">BURN</div>
+<div class="button-demo type">CUT</div>
+<div class="button-demo type">SURGICAL</div>
+<div class="button-demo type">CHRONIC</div>
+<div class="button-demo type">DIABETIC</div>
+<div class="button-demo type">ABRASION</div>
+<div class="button-demo type">LACERATION</div>
+<div class="button-demo type">PRESSURE ULCER</div>
+
+<div class="button-demo">← Back</div>
+<div class="button-demo submit">Submit Correction</div>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <h3>4️⃣ Model Learning Triggered</h3>
+                <p>When user submits correction, the model starts learning</p>
+                <div class="ui-mockup">
+🧠 Model Learning Triggered
+burn -> cut correction received
+📚 Training data queued
+🔄 Background learning started
+✅ Model will improve for future predictions
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>✨ Key Features</h2>
+            
+            <div class="workflow-step">
+                <h3>🎨 Smart UI Flow</h3>
+                <ul class="feature-list">
+                    <li><span class="icon">🔄</span> Seamless transition from feedback to correction</li>
+                    <li><span class="icon">🎯</span> Clear visual indication of predicted vs correct type</li>
+                    <li><span class="icon">📱</span> Responsive design for mobile and web</li>
+                    <li><span class="icon">⚡</span> Instant feedback and learning confirmation</li>
+                </ul>
+            </div>
+
+            <div class="workflow-step">
+                <h3>🧠 Real-time Learning</h3>
+                <ul class="feature-list">
+                    <li><span class="icon">📊</span> Training data automatically queued</li>
+                    <li><span class="icon">🔄</span> Background model retraining</li>
+                    <li><span class="icon">📈</span> Continuous improvement from user feedback</li>
+                    <li><span class="icon">🎯</span> Targeted learning for specific wound types</li>
+                </ul>
+            </div>
+
+            <div class="workflow-step">
+                <h3>💾 Data Management</h3>
+                <ul class="feature-list">
+                    <li><span class="icon">🗄️</span> SQLite database for feedback storage</li>
+                    <li><span class="icon">📄</span> CSV export for training data</li>
+                    <li><span class="icon">🔍</span> Complete audit trail of corrections</li>
+                    <li><span class="icon">📊</span> Learning progress tracking</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🔧 Technical Implementation</h2>
+            
+            <div class="workflow-step">
+                <h3>📱 Frontend Changes</h3>
+                <p><strong>React Native (AnalysisResultsScreen.js):</strong></p>
+                <div class="code-block">
+// Enhanced feedback state management
+const [showCorrectTypeSelector, setShowCorrectTypeSelector] = useState(false);
+const [selectedCorrectType, setSelectedCorrectType] = useState('');
+
+// Smart feedback handling
+const sendFeedback = async (status) => {
+  if (status === 'wrong') {
+    setShowCorrectTypeSelector(true);
+    return;
+  }
+  await submitFeedback('right', null);
+};
+
+// Wound type selector UI
+{showCorrectTypeSelector && (
+  &lt;WoundTypeSelector 
+    onTypeSelect={setSelectedCorrectType}
+    onSubmit={handleCorrectTypeSelection}
+  /&gt;
+)}
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <h3>🌐 Web Frontend</h3>
+                <p><strong>React (ImageUpload.js):</strong></p>
+                <div class="code-block">
+// Same enhanced feedback logic
+const submitFeedback = async (status, correctType = null) => {
+  const feedbackData = {
+    image_hash: prediction.image_hash,
+    feedback_status: status,
+    correct_type: correctType,
+    predicted_type: prediction.prediction
+  };
+  
+  await axios.post('/feedback', feedbackData);
+  
+  if (status === 'wrong' && correctType) {
+    alert(`Model learning: ${prediction.prediction} -> ${correctType}`);
+  }
+};
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <h3>🐍 Backend Enhancement</h3>
+                <p><strong>Flask (app.py):</strong></p>
+                <div class="code-block">
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    data = request.get_json()
+    
+    # Update feedback in database
+    update_feedback(data['image_hash'], data['feedback_status'])
+    
+    # Trigger learning for incorrect predictions
+    if data['feedback_status'] == 'wrong' and 'correct_type' in data:
+        trigger_model_learning(data)
+    
+    return jsonify({'status': 'success', 'message': 'Model learning triggered'})
+
+def trigger_model_learning(feedback_data):
+    training_data = {
+        'image_hash': feedback_data['image_hash'],
+        'predicted_type': feedback_data['predicted_type'],
+        'correct_type': feedback_data['correct_type'],
+        'learning_type': 'user_correction'
+    }
+    training_queue.put(training_data)
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>📊 Learning Impact</h2>
+            
+            <div class="workflow-step">
+                <h3>📈 Before Enhanced Feedback</h3>
+                <ul class="feature-list">
+                    <li><span class="icon">❌</span> User could only mark "Right" or "Wrong"</li>
+                    <li><span class="icon">❌</span> No way to provide correct classification</li>
+                    <li><span class="icon">❌</span> Model couldn't learn from corrections</li>
+                    <li><span class="icon">❌</span> Same mistakes repeated over time</li>
+                </ul>
+            </div>
+
+            <div class="workflow-step">
+                <h3>✅ After Enhanced Feedback</h3>
+                <ul class="feature-list">
+                    <li><span class="icon">✅</span> User can specify correct wound type</li>
+                    <li><span class="icon">✅</span> Model learns from specific corrections</li>
+                    <li><span class="icon">✅</span> Targeted improvement for problematic classifications</li>
+                    <li><span class="icon">✅</span> Continuous accuracy improvement</li>
+                </ul>
+            </div>
+
+            <div class="workflow-step">
+                <h3>🎯 Expected Results</h3>
+                <ul class="feature-list">
+                    <li><span class="icon">📊</span> Improved accuracy over time</li>
+                    <li><span class="icon">🎯</span> Better classification of edge cases</li>
+                    <li><span class="icon">🔄</span> Self-improving AI system</li>
+                    <li><span class="icon">👥</span> User-driven model enhancement</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🧪 How to Test</h2>
+            
+            <div class="workflow-step">
+                <h3>📱 React Native App</h3>
+                <ol>
+                    <li><strong>Start the app:</strong> <code>npm start</code></li>
+                    <li><strong>Upload an image:</strong> Go to PhotoUpload screen</li>
+                    <li><strong>Get prediction:</strong> Navigate to AnalysisResults screen</li>
+                    <li><strong>Test feedback:</strong> Click "❌ Incorrect" button</li>
+                    <li><strong>Select correct type:</strong> Choose from wound type grid</li>
+                    <li><strong>Submit correction:</strong> Click "Submit Correction"</li>
+                    <li><strong>Verify learning:</strong> Check console for learning messages</li>
+                </ol>
+            </div>
+
+            <div class="workflow-step">
+                <h3>🌐 Web App</h3>
+                <ol>
+                    <li><strong>Start backend:</strong> <code>cd backend && python app.py</code></li>
+                    <li><strong>Start frontend:</strong> <code>cd frontend && npm start</code></li>
+                    <li><strong>Open browser:</strong> Go to <code>http://localhost:3000</code></li>
+                    <li><strong>Upload image:</strong> Drag & drop or click to select</li>
+                    <li><strong>Test feedback:</strong> Click "❌ Wrong" button</li>
+                    <li><strong>Select type:</strong> Choose correct wound type</li>
+                    <li><strong>Submit:</strong> Click "Submit Correction"</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🎉 Enhanced feedback system successfully implemented!</p>
+            <p>The wound healing app now learns from user corrections in real-time, providing continuous improvement of AI predictions.</p>
+        </div>
+    </div>
+</body>
+</html>
+
+

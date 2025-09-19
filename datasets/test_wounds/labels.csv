@@ -1,0 +1,10 @@
+filename,wound_type,healing_time_category,days_to_cure
+chronic_wound_01.jpg,chronic,slow_healing,60
+chronic_wound_02.jpg,chronic,slow_healing,60
+chronic_wound_03.jpg,chronic,slow_healing,60
+surgical_wound_01.jpg,surgical,fast_healing,7
+surgical_wound_02.jpg,surgical,fast_healing,7
+surgical_wound_03.jpg,surgical,fast_healing,7
+burn_wound_01.jpg,burn,moderate_healing,21
+burn_wound_02.jpg,burn,moderate_healing,21
+burn_wound_03.jpg,burn,moderate_healing,21

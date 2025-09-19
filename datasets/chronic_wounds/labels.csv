@@ -1,0 +1,11 @@
+filename,wound_type,healing_time_category,days_to_cure
+wound_001.jpg,chronic,slow_healing,60
+wound_002.jpg,chronic,chronic_non_healing,90
+wound_003.jpg,chronic,moderate_healing,30
+wound_004.jpg,chronic,slow_healing,45
+wound_005.jpg,chronic,chronic_non_healing,120
+
+
+
+
+

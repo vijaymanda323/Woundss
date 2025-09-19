@@ -1,0 +1,54 @@
+/* PatientHistory.css */
+.patient-history-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.empty-history {
+  text-align: center;
+  padding: 3rem;
+  color: #7f8c8d;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-history h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+}
+
+.empty-history p {
+  margin: 0;
+}
+
+.history-list {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.history-status-container {
+  display: flex;
+  align-items: center;
+}
+
+.error-message {
+  text-align: center;
+  padding: 2rem;
+  color: #e74c3c;
+}
+
+.error-message p {
+  margin: 0 0 1rem 0;
+}
+
+
