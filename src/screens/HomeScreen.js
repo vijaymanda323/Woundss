@@ -16,25 +16,11 @@ const { width } = Dimensions.get('window');
 export default function HomeScreen({ navigation }) {
   const features = [
     {
-      icon: 'medical',
-      title: 'Appointment to Doctor',
-      description: 'Book appointment with medical professionals',
-      color: '#3498db',
-      action: () => navigation.navigate('DoctorAppointment'),
-    },
-    {
       icon: 'cloud-upload',
       title: 'Upload Photo',
       description: 'Upload wound images from gallery or files',
       color: '#2ecc71',
       action: () => navigation.navigate('PhotoUpload'),
-    },
-    {
-      icon: 'analytics',
-      title: 'AI Analysis',
-      description: 'Advanced wound analysis and classification',
-      color: '#9b59b6',
-      action: () => navigation.navigate('Analysis'),
     },
     {
       icon: 'medical',

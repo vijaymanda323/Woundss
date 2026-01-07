@@ -20,7 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 
 export default function PatientInfoScreen({ navigation, route }) {
-  const { imageUri } = route.params || {};
+  const { images } = route.params || {};
   
   const [patientInfo, setPatientInfo] = useState({
     id: '',
@@ -76,7 +76,7 @@ export default function PatientInfoScreen({ navigation, route }) {
     try {
       // Navigate to analysis screen with patient info and image
       navigation.navigate('Analysis', {
-        imageUri,
+        images,
         patientInfo,
       });
     } catch (error) {

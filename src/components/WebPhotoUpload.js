@@ -60,11 +60,15 @@ export default function WebPhotoUpload({ onImageSelected, onUploadProgress }) {
         }
       }
 
-      // Create object URL for the image
+      // Create object URL for preview and pass File for upload
       const imageUrl = URL.createObjectURL(file);
-      
       if (onImageSelected) {
-        onImageSelected(imageUrl, file.name);
+        onImageSelected({
+          uri: imageUrl,
+          name: file.name,
+          type: file.type || 'image/jpeg',
+          file,
+        });
       }
 
     } catch (error) {

@@ -15,6 +15,7 @@ import TreatmentPlanScreen from './src/screens/TreatmentPlanScreen';
 import PatientInfoScreen from './src/screens/PatientInfoScreen';
 import ResultsScreen from './src/screens/ResultsScreen';
 import ReportsScreen from './src/screens/ReportsScreen';
+import PatientDetailScreen from './src/screens/PatientDetailScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import DoctorAppointmentScreen from './src/screens/DoctorAppointmentScreen';
 import WoundQuestionnaireScreen from './src/screens/WoundQuestionnaireScreen';
@@ -87,6 +88,11 @@ export default function App() {
               name="Reports" 
               component={ReportsScreen}
               options={{ title: 'Reports' }}
+            />
+            <Stack.Screen 
+              name="PatientDetail" 
+              component={PatientDetailScreen}
+              options={{ title: 'Patient Analysis' }}
             />
             <Stack.Screen 
               name="History" 

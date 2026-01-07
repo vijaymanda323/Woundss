@@ -23,7 +23,7 @@ import {
   Dialog,
 } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import { fetchWithTimeout } from '../services/apiService';
+import { getPatientHistory, getPatientById, searchPatients } from '../services/apiService';
 import * as Haptics from 'expo-haptics';
 
 export default function HistoryScreen({ navigation, route }) {
@@ -106,6 +106,9 @@ export default function HistoryScreen({ navigation, route }) {
     days_to_heal: '',
     previousAreaCm2: '0',
   });
+  const [patientSearchQuery, setPatientSearchQuery] = useState('');
+  const [patientSearchResults, setPatientSearchResults] = useState([]);
+  const [isSearchingPatients, setIsSearchingPatients] = useState(false);
 
   // Mock patient history data
   const mockHistory = [
@@ -198,49 +201,56 @@ export default function HistoryScreen({ navigation, route }) {
     }
   };
 
+  const handlePatientSearch = async () => {
+    const query = patientSearchQuery.trim();
+    if (!query) return;
+
+    setIsSearchingPatients(true);
+    try {
+      const results = await searchPatients(query);
+      setPatientSearchResults(results || []);
+    } catch (error) {
+      console.error('Patient search error:', error);
+      Alert.alert('Search Error', 'Unable to search patients. Please try again.');
+      setPatientSearchResults([]);
+    } finally {
+      setIsSearchingPatients(false);
+    }
+  };
+
+  const handleSelectPatientFromSearch = (patient) => {
+    if (!patient?.id) return;
+    setPatientIdInput(patient.id);
+    setPatientSearchQuery('');
+    setPatientSearchResults([]);
+    handlePatientIdChange(patient.id);
+  };
+
   const loadPatientHistory = async () => {
     setIsLoading(true);
     try {
-      // Fetch patient details
-      if (patientId) {
-        const patientResponse = await fetchWithTimeout(`http://10.81.160.244:5000/patient/${patientId}/details`, {
-          method: 'GET',
-        }, 8000);
-        if (patientResponse.ok) {
-          const patientData = await patientResponse.json();
-          setPatientDetails(patientData.patient);
+      // Look up patient details (if ID provided)
+      if (patientId && patientId.trim()) {
+        try {
+          const details = await getPatientById(patientId.trim());
+          setPatientDetails(details);
+        } catch (e) {
+          console.log('Patient lookup failed:', e?.message || e);
+          setPatientDetails(null);
         }
+      } else {
+        setPatientDetails(null);
       }
 
-      // Fetch day-wise history
-      const currentPatientId = patientId || 'test_patient';
-      console.log('Loading history for patient:', currentPatientId);
-      
-      const daysResponse = await fetchWithTimeout(`http://10.81.160.244:5000/patient/${currentPatientId}/history/days`, {
-        method: 'GET',
-      }, 8000);
-      if (daysResponse.ok) {
-        const daysData = await daysResponse.json();
-        console.log('Days data received:', daysData);
-        setDaysData(daysData.days || []);
-        
-        // Flatten all records for backward compatibility
-        const allRecords = [];
-        daysData.days?.forEach(day => {
-          allRecords.push(...day.records);
-        });
-        setPatientHistory(allRecords);
-        console.log('Set patient history:', allRecords.length, 'records');
-      } else {
-        console.log('Days response failed, using mock data');
-        // Use mock data if no real data available
-        setPatientHistory(mockHistory);
-        setDaysData([]);
-      }
+      const history = await getPatientHistory();
+      const filteredHistory = patientId
+        ? history.filter((record) => record.patient_id === patientId)
+        : history;
+      setPatientHistory(filteredHistory);
+      setDaysData([]);
     } catch (error) {
       console.error('Error loading patient history:', error);
-      // Use mock data as fallback
-      setPatientHistory(mockHistory);
+      setPatientHistory([]);
       setDaysData([]);
     } finally {
       setIsLoading(false);
@@ -729,50 +739,55 @@ export default function HistoryScreen({ navigation, route }) {
         </Card>
       )}
 
-      {/* Patient ID Input Card */}
+      {/* Patient Search Card */}
       <Card style={styles.inputCard}>
         <Card.Content>
-          <Title style={styles.inputTitle}>🔍 Search by Patient ID</Title>
+          <Title style={styles.inputTitle}>🔍 Search by Patient</Title>
           <Paragraph style={styles.inputSubtitle}>
-            Enter a patient ID to view their wound healing history
+            Search by name or MRN, then select a patient to view their wound healing history
           </Paragraph>
           <View style={styles.inputRow}>
             <TextInput
-              label="Patient ID"
-              value={patientIdInput}
-              onChangeText={setPatientIdInput}
+              label="Name or MRN"
+              value={patientSearchQuery}
+              onChangeText={setPatientSearchQuery}
               style={styles.patientIdInput}
               mode="outlined"
               keyboardType="default"
-              placeholder="Enter patient ID (e.g., PMFQ4MV2L8F437O)"
+              placeholder="Type part of the patient name or MRN"
               autoFocus={false}
               returnKeyType="search"
-              onSubmitEditing={() => handlePatientIdChange(patientIdInput)}
+              onSubmitEditing={handlePatientSearch}
             />
             <Button
               mode="contained"
-              onPress={() => handlePatientIdChange(patientIdInput)}
+              onPress={handlePatientSearch}
               style={styles.searchButton}
-              disabled={!patientIdInput.trim() || isLoading}
+              disabled={!patientSearchQuery.trim() || isLoading || isSearchingPatients}
               icon="magnify"
             >
-              Search
+              {isSearchingPatients ? 'Searching...' : 'Search'}
             </Button>
           </View>
-        <View style={styles.quickSearchRow}>
-          <Button
-            mode="outlined"
-            onPress={() => {
-              setPatientIdInput('test_patient');
-              handlePatientIdChange('test_patient');
-            }}
-            style={styles.quickButton}
-            icon="test-tube"
-            compact
-          >
-            Test Patient
-          </Button>
-        </View>
+          {patientSearchResults.length > 0 && (
+            <View style={styles.searchResultsContainer}>
+              {patientSearchResults.map((p) => (
+                <TouchableOpacity
+                  key={p.id}
+                  style={styles.searchResultItem}
+                  onPress={() => handleSelectPatientFromSearch(p)}
+                >
+                  <Ionicons name="person-circle" size={24} color="#3498db" />
+                  <View style={styles.searchResultTextContainer}>
+                    <Text style={styles.searchResultName}>{p.name || 'Unnamed patient'}</Text>
+                    <Text style={styles.searchResultSubtitle}>
+                      MRN: {p.mrn || 'N/A'} • DOB: {p.dob || 'N/A'}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
         </Card.Content>
       </Card>
 
@@ -1055,6 +1070,26 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     fontSize: 16,
     minHeight: 50,
+  },
+  searchResultsContainer: {
+    marginTop: 15,
+  },
+  searchResultItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  searchResultTextContainer: {
+    marginLeft: 10,
+  },
+  searchResultName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#2c3e50',
+  },
+  searchResultSubtitle: {
+    fontSize: 14,
+    color: '#7f8c8d',
   },
   searchButton: {
     backgroundColor: '#27ae60',

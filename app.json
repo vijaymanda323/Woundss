@@ -6,14 +6,15 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#667eea"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+
+    "assetBundlePatterns": ["**/*"],
+
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.woundhealing.tracker",
@@ -23,44 +24,49 @@
           "NSExceptionDomains": {
             "10.81.160.244": {
               "NSExceptionAllowsInsecureHTTPLoads": true,
-              "NSExceptionMinimumTLSVersion": "1.0",
               "NSIncludesSubdomains": true
             },
             "127.0.0.1": {
               "NSExceptionAllowsInsecureHTTPLoads": true,
-              "NSExceptionMinimumTLSVersion": "1.0",
               "NSIncludesSubdomains": true
             },
             "localhost": {
               "NSExceptionAllowsInsecureHTTPLoads": true,
-              "NSExceptionMinimumTLSVersion": "1.0",
               "NSIncludesSubdomains": true
             }
           }
         }
       }
     },
+
     "android": {
+      "package": "com.woundhealing.tracker",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#667eea"
       },
-      "package": "com.woundhealing.tracker",
       "permissions": [
         "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "MEDIA_LIBRARY",
         "INTERNET",
-        "ACCESS_NETWORK_STATE"
-      ],
-      "usesCleartextTraffic": true
+        "ACCESS_NETWORK_STATE",
+        "RECORD_AUDIO"
+      ]
     },
+
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
+
     "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
       [
         "expo-image-picker",
         {
@@ -76,9 +82,13 @@
       ],
       "expo-asset",
       "expo-font"
-    ]
+    ],
+
+    "extra": {
+      "eas": {
+        "projectId": "91777196-1a93-413f-bfa5-c91d23655521"
+      }
+    }
   }
 }
-
-
 

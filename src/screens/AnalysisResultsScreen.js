@@ -197,6 +197,11 @@ export default function AnalysisResultsScreen({ navigation, route }) {
     const areaPixels = result.area_pixels || Math.floor(area * 100); // Estimate pixels from cm²
     
     const severity = getWoundSeverity(area, woundType);
+    const bacteriaType =
+      result.bacteria_type ||
+      result.enhanced_analysis?.bacteria_type ||
+      result.report?.bacteria_type ||
+      'unknown';
     const treatmentPlan = generateTreatmentPlan({
       woundType,
       area,
@@ -212,6 +217,7 @@ export default function AnalysisResultsScreen({ navigation, route }) {
       area,
       healingTime,
       confidence,
+      bacteriaType,
       severity,
       perimeter,
       areaPixels,
@@ -430,6 +436,14 @@ export default function AnalysisResultsScreen({ navigation, route }) {
               <Text style={styles.resultValue}>{analysisData.healingTime} days</Text>
             </View>
             <View style={styles.resultItem}>
+              <Text style={styles.resultLabel}>Bacteria Type</Text>
+              <Text style={styles.resultValue}>
+                {analysisData.bacteriaType && analysisData.bacteriaType !== 'unknown'
+                  ? analysisData.bacteriaType
+                  : 'Not detected'}
+              </Text>
+            </View>
+            <View style={styles.resultItem}>
               <Text style={styles.resultLabel}>Confidence</Text>
               <Text style={styles.resultValue}>{(analysisData.confidence * 100).toFixed(1)}%</Text>
             </View>
@@ -441,123 +455,6 @@ export default function AnalysisResultsScreen({ navigation, route }) {
         </Card.Content>
       </Card>
 
-      {/* Gemini AI Analysis Results */}
-      <Card style={styles.externalAICard}>
-        <Card.Content>
-          <Title style={styles.cardTitle}>
-            <Ionicons name="cloud-done" size={24} color="#4CAF50" />
-            Gemini AI Analysis
-          </Title>
-          
-          {/* Show Gemini analysis if available */}
-          {analysisData?.originalResult?.gemini_analysis ? (
-            <View style={styles.geminiResults}>
-              {analysisData.originalResult.gemini_analysis?.Type && (
-                <View style={styles.geminiResultItem}>
-                  <Text style={styles.geminiResultLabel}>Type:</Text>
-                  <Chip 
-                    style={[styles.geminiChip, { backgroundColor: getWoundTypeColor(analysisData.originalResult.gemini_analysis?.Type?.toLowerCase()) }]}
-                    textStyle={styles.geminiChipText}
-                  >
-                    {analysisData.originalResult.gemini_analysis?.Type}
-                  </Chip>
-                </View>
-              )}
-              
-              {analysisData.originalResult.gemini_analysis.Severity && (
-                <View style={styles.geminiResultItem}>
-                  <Text style={styles.geminiResultLabel}>Severity:</Text>
-                  <Chip 
-                    style={[styles.geminiChip, { backgroundColor: getSeverityColor(analysisData.originalResult.gemini_analysis.Severity) }]}
-                    textStyle={styles.geminiChipText}
-                  >
-                    {analysisData.originalResult.gemini_analysis.Severity}
-                  </Chip>
-                </View>
-              )}
-              
-              {analysisData.originalResult.gemini_analysis.Explanation && (
-                <View style={styles.geminiExplanation}>
-                  <Text style={styles.geminiExplanationLabel}>Medical Analysis:</Text>
-                  <Text style={styles.geminiExplanationText}>
-                    {analysisData.originalResult.gemini_analysis.Explanation}
-                  </Text>
-                </View>
-              )}
-              
-              {/* Show raw response if available */}
-              {analysisData.originalResult.gemini_analysis.raw_response && (
-                <View style={styles.geminiRawResponse}>
-                  <Text style={styles.geminiRawLabel}>Full AI Response:</Text>
-                  <Text style={styles.geminiRawText}>
-                    {analysisData.originalResult.gemini_analysis.raw_response}
-                  </Text>
-                </View>
-              )}
-            </View>
-          ) : (
-            <View style={styles.geminiFallback}>
-              <Paragraph style={styles.externalAIDescription}>
-                This analysis is powered by Google's Gemini AI for accurate wound classification and medical insights.
-              </Paragraph>
-              <View style={styles.geminiIndicator}>
-                <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
-                <Text style={styles.geminiText}>Gemini AI Analysis Complete</Text>
-              </View>
-            </View>
-          )}
-        </Card.Content>
-      </Card>
-
-      {/* Medical Disclaimer */}
-      <Card style={styles.disclaimerCard}>
-        <Card.Content>
-          <View style={styles.disclaimerHeader}>
-            <Ionicons name="warning" size={24} color="#e74c3c" />
-            <Title style={styles.disclaimerTitle}>Important Medical Disclaimer</Title>
-          </View>
-          <Paragraph style={styles.disclaimerText}>
-            <Text style={styles.boldText}>⚠️ DO NOT TAKE ANY MEDICINES WITHOUT CONSULTING A DOCTOR</Text>
-          </Paragraph>
-          <Paragraph style={styles.disclaimerText}>
-            This analysis is for informational purposes only and does not replace professional medical advice, diagnosis, or treatment. 
-            Always consult with a qualified healthcare provider before taking any medications.
-          </Paragraph>
-        </Card.Content>
-      </Card>
-
-      {/* Doctor Appointment Alert for Moderate/Severe Cases */}
-      {(analysisData?.severity === 'Moderate' || analysisData?.severity === 'Severe') && (
-        <Card style={[styles.appointmentCard, { borderLeftColor: analysisData.severity === 'Severe' ? '#e74c3c' : '#f39c12' }]}>
-          <Card.Content>
-            <Title style={styles.cardTitle}>
-              <Ionicons 
-                name={analysisData.severity === 'Severe' ? 'alert-circle' : 'warning'} 
-                size={24} 
-                color={analysisData.severity === 'Severe' ? '#e74c3c' : '#f39c12'} 
-              />
-              Medical Attention Recommended
-            </Title>
-            <Paragraph style={styles.appointmentDescription}>
-              Your wound has been classified as <Text style={[styles.severityText, { color: analysisData.severity === 'Severe' ? '#e74c3c' : '#f39c12' }]}>{analysisData.severity.toUpperCase()}</Text> severity. 
-              We strongly recommend consulting with a medical professional for proper treatment.
-            </Paragraph>
-            <Button
-              mode="contained"
-              onPress={() => navigation.navigate('DoctorAppointment', { 
-                severity: analysisData.severity, 
-                woundType: analysisData.woundType 
-              })}
-              style={[styles.appointmentButton, { backgroundColor: analysisData.severity === 'Severe' ? '#e74c3c' : '#f39c12' }]}
-              icon="medical"
-            >
-              Book Doctor Appointment
-            </Button>
-          </Card.Content>
-        </Card>
-      )}
-
-
       <Card style={styles.summaryCard}>
         <Card.Content>
           <Title>📋 Analysis Summary</Title>
@@ -568,91 +465,11 @@ export default function AnalysisResultsScreen({ navigation, route }) {
               The wound area measures <Text style={styles.highlight}>{analysisData.area} cm²</Text> and is 
               expected to heal within <Text style={styles.highlight}>{analysisData.healingTime} days</Text> 
               with proper treatment.
+              {analysisData.bacteriaType && analysisData.bacteriaType !== 'unknown' && (
+                <> The detected bacteria type is <Text style={styles.highlight}>{analysisData.bacteriaType}</Text>.</>
+              )}
             </Text>
           </View>
-        </Card.Content>
-      </Card>
-
-      <Card style={styles.feedbackCard}>
-        <Card.Content>
-          <Title>📝 Prediction Feedback</Title>
-          <Paragraph>
-            Is this prediction accurate? Your feedback helps improve the AI model.
-          </Paragraph>
-          
-          {!feedbackSent && !showCorrectTypeSelector ? (
-            <View style={styles.feedbackButtons}>
-              <Button
-                mode="contained"
-                onPress={() => sendFeedback('right')}
-                style={[styles.feedbackButton, { backgroundColor: '#27ae60' }]}
-                icon="check"
-              >
-                ✅ Correct
-              </Button>
-              <Button
-                mode="contained"
-                onPress={() => sendFeedback('wrong')}
-                style={[styles.feedbackButton, { backgroundColor: '#e74c3c' }]}
-                icon="close"
-              >
-                ❌ Incorrect
-              </Button>
-            </View>
-          ) : showCorrectTypeSelector ? (
-            <View style={styles.typeSelectorContainer}>
-              <Title style={styles.selectorTitle}>🤔 What is the correct wound type?</Title>
-              <Paragraph style={styles.selectorSubtitle}>
-                Predicted: <Text style={styles.predictedType}>{analysisData.woundType}</Text>
-              </Paragraph>
-              
-              <View style={styles.woundTypeGrid}>
-                {['burn', 'cut', 'surgical', 'chronic', 'diabetic', 'abrasion', 'laceration', 'pressure_ulcer'].map((type) => (
-                  <Button
-                    key={type}
-                    mode={selectedCorrectType === type ? 'contained' : 'outlined'}
-                    onPress={() => setSelectedCorrectType(type)}
-                    style={[
-                      styles.typeButton,
-                      selectedCorrectType === type && { backgroundColor: getWoundTypeColor(type) }
-                    ]}
-                    labelStyle={styles.typeButtonLabel}
-                  >
-                    {type.replace('_', ' ').toUpperCase()}
-                  </Button>
-                ))}
-              </View>
-              
-              <View style={styles.selectorActions}>
-                <Button
-                  mode="outlined"
-                  onPress={() => {
-                    setShowCorrectTypeSelector(false);
-                    setSelectedCorrectType('');
-                  }}
-                  style={styles.selectorActionButton}
-                  icon="arrow-left"
-                >
-                  Back
-                </Button>
-                <Button
-                  mode="contained"
-                  onPress={handleCorrectTypeSelection}
-                  style={[styles.selectorActionButton, { backgroundColor: '#667eea' }]}
-                  icon="check"
-                  disabled={!selectedCorrectType}
-                >
-                  Submit Correction
-                </Button>
-              </View>
-            </View>
-          ) : (
-            <View style={styles.feedbackSent}>
-              <Text style={styles.feedbackSentText}>
-                ✅ Thank you for your feedback!
-              </Text>
-            </View>
-          )}
         </Card.Content>
       </Card>
 
